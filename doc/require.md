@@ -31,7 +31,7 @@ REPORT
 
 
 Constraints:
-The toy robot must not overshoot  the table during movement. This also includes the initial placement of the toy robot.
+The toy robot must not overshoot the table during movement. This also includes the initial placement of the toy robot.
 Any move that would cause the robot to fall must be ignored.
 
 Example Input and Output:
@@ -54,3 +54,5 @@ MOVE E
 REPORT
 Output: 2,3,EMPTY
 
+
+react-native init RobotPuzzle2 --template typescript
