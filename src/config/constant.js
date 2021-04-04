@@ -16,3 +16,7 @@ export const DIRECTION = {
   S: 'S',
   N: 'N',
 };
+
+export const ZINDEX = {
+  OVERLAY: 3,
+};

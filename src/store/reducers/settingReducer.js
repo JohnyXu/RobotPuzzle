@@ -10,7 +10,7 @@ export const errorSettingAct = error => {
   return {
     type: TYPES.ERROR,
     payload: {
-      error: '',
+      error,
     },
   };
 };
@@ -22,6 +22,7 @@ export default function reducer(state = initState, action) {
         ...state,
         error: action.payload.error,
       };
+
     default:
       return state;
   }

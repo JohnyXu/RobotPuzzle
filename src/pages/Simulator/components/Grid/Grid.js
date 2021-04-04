@@ -3,14 +3,17 @@ import {View, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Fontisto';
 import {useSelector} from 'react-redux';
 import {arrayFromInterger} from '../../../../utils';
-import {DIMENSION_GRID} from '../../config';
+import {DIMENSION_GRID, SIZE_GRID} from '../../config';
 import Robot from './components/Robot';
+import Water from './components/Water';
+import {hasWaterInPosition} from './util';
 
 export default function Grid() {
   const rows = arrayFromInterger(DIMENSION_GRID.Y);
   const columns = arrayFromInterger(DIMENSION_GRID.X);
 
   const robotState = useSelector(state => state.robot);
+  console.log(robotState);
 
   return (
     <View
@@ -30,8 +33,8 @@ export default function Grid() {
             <Text
               key={index}
               style={{
-                fontSize: 20,
-                paddingVertical: 20,
+                fontSize: 21,
+                paddingVertical: 16,
                 paddingHorizontal: 10,
               }}>
               {DIMENSION_GRID.Y - 1 - index}
@@ -46,36 +49,45 @@ export default function Grid() {
           flexDirection: 'column',
           justifyContent: 'flex-end',
         }}>
-        <View
-          style={{
-            position: 'relative',
-            flexDirection: 'column',
-          }}>
-          {rows.map(rowIndex => {
-            return (
-              <View
-                key={rowIndex}
-                style={{
-                  flexDirection: 'row',
-                }}>
-                {columns.map(colIndex => {
-                  return (
-                    <View
-                      key={colIndex}
-                      style={{
-                        width: 60,
-                        height: 60,
-                        opacity: 0.5,
-                        backgroundColor:
-                          (rowIndex + colIndex) % 2 === 0 ? 'red' : 'blue',
-                      }}
-                    />
-                  );
-                })}
-              </View>
-            );
-          })}
-        </View>
+        {robotState.water && (
+          <View
+            style={{
+              position: 'relative',
+              flexDirection: 'column',
+            }}>
+            {rows.map(rowIndex => {
+              return (
+                <View
+                  key={rowIndex}
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  {columns.map(colIndex => {
+                    const hasWater = hasWaterInPosition(
+                      rowIndex,
+                      colIndex,
+                      robotState.water,
+                    );
+                    return (
+                      <View
+                        key={colIndex}
+                        style={{
+                          width: SIZE_GRID.WIDTH,
+                          height: SIZE_GRID.HEIGHT,
+                          opacity: 0.5,
+                          backgroundColor:
+                            (rowIndex + colIndex) % 2 === 0 ? 'red' : 'blue',
+                        }}>
+                        {hasWater && <Water />}
+                      </View>
+                    );
+                  })}
+                </View>
+              );
+            })}
+          </View>
+        )}
+
         <View
           style={{
             flexDirection: 'row',
@@ -85,7 +97,7 @@ export default function Grid() {
               <Text
                 key={index}
                 style={{
-                  fontSize: 20,
+                  fontSize: 21,
                   paddingHorizontal: 23,
                   paddingVertical: 8,
                 }}>

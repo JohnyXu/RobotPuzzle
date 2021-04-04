@@ -25,3 +25,12 @@ export const isNextPositionValid = (position, direction) => {
   }
   return true;
 };
+
+export const getWellBelowStatus = position => {
+  const {y} = position;
+  const belowY = y - 1;
+  if (belowY < 0) {
+    return 'FULL';
+  }
+  return 'EMPTY';
+};
