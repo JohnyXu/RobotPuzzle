@@ -8,14 +8,14 @@ const HEIGHT = SIZE_GRID.HEIGHT;
 
 export default function Water() {
   return (
-    <View style={styles.waterView}>
+    <View style={styles.iconView}>
       <Icon name="water" size={30} color="white" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  waterView: {
+  iconView: {
     zIndex: 2,
     flex: 1,
     width: WIDTH,

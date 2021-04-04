@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Fontisto';
 import {useSelector} from 'react-redux';
@@ -11,57 +11,35 @@ import {hasWaterInPosition} from './util';
 export default function Grid() {
   const rows = arrayFromInterger(DIMENSION_GRID.Y);
   const columns = arrayFromInterger(DIMENSION_GRID.X);
-
   const robotState = useSelector(state => state.robot);
-  console.log(robotState);
+
+  const getCellView = (rowIndex, colIndex) => {
+    return {
+      width: SIZE_GRID.WIDTH,
+      height: SIZE_GRID.HEIGHT,
+      opacity: 0.5,
+      backgroundColor: (rowIndex + colIndex) % 2 === 0 ? 'red' : 'blue',
+    };
+  };
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 8,
-      }}>
-      <View
-        style={{
-          flexDirection: 'column',
-          justifyContent: 'center',
-          marginHorizontal: 8,
-        }}>
+    <View style={styles.layout}>
+      <View style={styles.leftView}>
         {rows.map(index => {
           return (
-            <Text
-              key={index}
-              style={{
-                fontSize: 21,
-                paddingVertical: 16,
-                paddingHorizontal: 10,
-              }}>
+            <Text key={index} style={styles.xText}>
               {DIMENSION_GRID.Y - 1 - index}
             </Text>
           );
         })}
         <Icon name="compass-alt" size={45} />
       </View>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-        }}>
+      <View style={styles.rightView}>
         {robotState.water && (
-          <View
-            style={{
-              position: 'relative',
-              flexDirection: 'column',
-            }}>
+          <View style={styles.gridView}>
             {rows.map(rowIndex => {
               return (
-                <View
-                  key={rowIndex}
-                  style={{
-                    flexDirection: 'row',
-                  }}>
+                <View key={rowIndex} style={styles.rowView}>
                   {columns.map(colIndex => {
                     const hasWater = hasWaterInPosition(
                       rowIndex,
@@ -71,13 +49,7 @@ export default function Grid() {
                     return (
                       <View
                         key={colIndex}
-                        style={{
-                          width: SIZE_GRID.WIDTH,
-                          height: SIZE_GRID.HEIGHT,
-                          opacity: 0.5,
-                          backgroundColor:
-                            (rowIndex + colIndex) % 2 === 0 ? 'red' : 'blue',
-                        }}>
+                        style={getCellView(rowIndex, colIndex)}>
                         {hasWater && <Water />}
                       </View>
                     );
@@ -87,20 +59,10 @@ export default function Grid() {
             })}
           </View>
         )}
-
-        <View
-          style={{
-            flexDirection: 'row',
-          }}>
+        <View style={styles.yAxisView}>
           {columns.map(index => {
             return (
-              <Text
-                key={index}
-                style={{
-                  fontSize: 21,
-                  paddingHorizontal: 23,
-                  paddingVertical: 8,
-                }}>
+              <Text key={index} style={styles.yText}>
                 {index}
               </Text>
             );
@@ -116,3 +78,41 @@ export default function Grid() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  layout: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 8,
+  },
+  leftView: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginHorizontal: 8,
+  },
+  rightView: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
+  xText: {
+    fontSize: 21,
+    paddingVertical: 16,
+    paddingHorizontal: 10,
+  },
+  gridView: {
+    position: 'relative',
+    flexDirection: 'column',
+  },
+  rowView: {
+    flexDirection: 'row',
+  },
+  yAxisView: {
+    flexDirection: 'row',
+  },
+  yText: {
+    fontSize: 21,
+    paddingHorizontal: 23,
+    paddingVertical: 8,
+  },
+});

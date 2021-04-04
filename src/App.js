@@ -1,7 +1,6 @@
 import React from 'react';
 import configureStore from './store/configureStore';
 import {Provider} from 'react-redux';
-
 import Simulator from './pages/Simulator';
 
 const store = configureStore();

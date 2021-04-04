@@ -17,7 +17,7 @@ import {
   placeRobotAct,
   resetRobotAct,
 } from '../../store/reducers/robotReducer';
-import {COMMAND, DIRECTION} from '../../config/constant';
+import {COMMAND} from '../../config/constant';
 import {getWellBelowStatus, isNextPositionValid} from './util';
 import {errorSettingAct} from '../../store/reducers/settingReducer';
 import ERROR_MSG from '../../config/error-msg';
@@ -31,11 +31,11 @@ export default function Simulator() {
   const [commands, updateCommands] = useState([]);
   const robotState = useSelector(state => state.robot);
   const settingState = useSelector(state => state.setting);
-  console.log('setting:', settingState);
 
   const onChangeEvent = text => {
     setCommand(text.toUpperCase());
   };
+
   const onSubmitEditing = () => {
     const markCommand = command.substr(0);
     setCommand('');
@@ -85,10 +85,10 @@ export default function Simulator() {
       }
       return;
     }
+    // place
     if (!commandOptions[1]) {
       return dispatch(errorSettingAct(ERROR_MSG.PLACE_FORMAT));
     }
-    // place
     const [x, y] = commandOptions[1].split(',');
     if (!y) {
       return dispatch(errorSettingAct(ERROR_MSG.PLACE_FORMAT));
@@ -103,70 +103,43 @@ export default function Simulator() {
     }
     updateCommands([...commands, markCommand]);
     dispatch(errorSettingAct(''));
-    dispatch(placeRobotAct({x: parseInt(x), y: parseInt(y)}));
+    dispatch(placeRobotAct({x: colIndex, y: rowIndex}));
+  };
+
+  const onResetClick = () => {
+    dispatch(resetRobotAct());
+    dispatch(errorSettingAct(''));
+    updateCommands([]);
   };
 
   return (
-    <SafeAreaView
-      style={{
-        position: 'relative',
-        backgroundColor: 'white',
-      }}>
+    <SafeAreaView style={styles.layout}>
       <ScrollView>
         <Text style={styles.simulatorTitle}>Let's play with the robot</Text>
         <Grid />
         {settingState && settingState.error.length > 0 && (
           <Overlay text={settingState.error} />
         )}
-
         <TextInput
           placeholder={'Tell the robot what to do ...'}
           value={command}
           returnKeyType={'done'}
           onSubmitEditing={onSubmitEditing}
           onChangeText={onChangeEvent}
-          style={{
-            paddingHorizontal: 10,
-            marginHorizontal: 10,
-            marginVertical: 6,
-            height: 50,
-            borderColor: 'grey',
-            borderRadius: 5,
-            borderWidth: 1,
-          }}
+          style={styles.input}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginVertical: 10,
-          }}>
-          <View
-            style={{
-              flex: 1,
-              marginHorizontal: 5,
-            }}>
+        <View style={styles.buttonView}>
+          <View style={styles.buttonWrapper}>
             <Button
               full
               warning
-              style={{
-                height: 50,
-              }}
-              onPress={() => {
-                onSubmitEditing();
-              }}>
+              style={styles.buttonStyle}
+              onPress={onSubmitEditing}>
               <Text>Run</Text>
             </Button>
           </View>
-          <View style={{flex: 1, marginHorizontal: 5}}>
-            <Button
-              full
-              style={{height: 50}}
-              onPress={() => {
-                dispatch(resetRobotAct());
-                dispatch(errorSettingAct(''));
-                updateCommands([]);
-              }}>
+          <View style={styles.buttonWrapper}>
+            <Button full style={styles.buttonStyle} onPress={onResetClick}>
               <Text>Reset</Text>
             </Button>
           </View>
@@ -178,10 +151,35 @@ export default function Simulator() {
 }
 
 const styles = StyleSheet.create({
+  layout: {
+    position: 'relative',
+    backgroundColor: 'white',
+  },
   simulatorTitle: {
     color: 'red',
     fontSize: 17,
     textAlign: 'center',
     paddingVertical: 10,
+  },
+  input: {
+    paddingHorizontal: 10,
+    marginHorizontal: 10,
+    marginVertical: 6,
+    height: 50,
+    borderColor: 'grey',
+    borderRadius: 5,
+    borderWidth: 1,
+  },
+  buttonView: {
+    flexDirection: 'row',
+    marginHorizontal: 15,
+    marginVertical: 10,
+  },
+  buttonWrapper: {
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  buttonStyle: {
+    height: 50,
   },
 });
