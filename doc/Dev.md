@@ -30,6 +30,3 @@ https://github.com/oblador/react-native-vector-icons
 
 ## How to place a text over image
 https://stackoverflow.com/questions/49250047/how-to-place-a-text-over-image-in-react-native
-
-## 文字水平居中
-`textAlign: 'center',`

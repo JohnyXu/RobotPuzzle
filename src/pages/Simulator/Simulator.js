@@ -80,7 +80,7 @@ export default function Simulator() {
         const {x, y} = robotState.position;
         updateCommands([
           ...commands,
-          ...[markCommand, `Output: ${x},${y},${status}`],
+          ...[markCommand, `Output: ${y},${x},${status}`],
         ]);
       }
       return;
@@ -89,7 +89,7 @@ export default function Simulator() {
     if (!commandOptions[1]) {
       return dispatch(errorSettingAct(ERROR_MSG.PLACE_FORMAT));
     }
-    const [x, y] = commandOptions[1].split(',');
+    const [y, x] = commandOptions[1].split(',');
     if (!(x && y)) {
       return dispatch(errorSettingAct(ERROR_MSG.PLACE_FORMAT));
     }
@@ -101,7 +101,7 @@ export default function Simulator() {
     if (!isValidPosition) {
       return dispatch(errorSettingAct(ERROR_MSG.PLACE_FORMAT));
     }
-    updateCommands([...commands, markCommand]);
+    updateCommands([markCommand]);
     dispatch(errorSettingAct(''));
     dispatch(placeRobotAct({x: colIndex, y: rowIndex}));
   };

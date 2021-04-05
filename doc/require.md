@@ -53,6 +53,3 @@ MOVE N
 MOVE E
 REPORT
 Output: 2,3,EMPTY
-
-
-react-native init RobotPuzzle2 --template typescript
