@@ -34,7 +34,7 @@ Please guarantee the iOS or Android Env is ok.
 
 ## Screen
 
-![Test case](../screens/Test3.png)
+![Test case](./screens/Test3.png)
 
 1. input data below and then enter or click Run button:
 2. reset button will reset the data in memory
