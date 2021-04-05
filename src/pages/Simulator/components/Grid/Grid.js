@@ -6,7 +6,7 @@ import {arrayFromInterger} from '../../../../utils';
 import {DIMENSION_GRID, SIZE_GRID} from '../../config';
 import Robot from './components/Robot';
 import Water from './components/Water';
-import {hasWaterInPosition} from './util';
+import {hasWaterInPosition} from './../../util';
 
 export default function Grid() {
   const rows = arrayFromInterger(DIMENSION_GRID.Y);

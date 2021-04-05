@@ -19,3 +19,7 @@ export const isSouthDirection = direction => {
 export const isNorthDirection = direction => {
   return direction === DIRECTION.N || direction === DIRECTION.NORTH;
 };
+
+export const isInRange = (digit, low, high) => {
+  return digit >= low && digit < high;
+};

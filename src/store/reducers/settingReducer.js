@@ -2,7 +2,7 @@ const initState = {
   error: '',
 };
 
-const TYPES = {
+export const TYPES = {
   ERROR: 'ERROR',
 };
 
@@ -22,7 +22,6 @@ export default function reducer(state = initState, action) {
         ...state,
         error: action.payload.error,
       };
-
     default:
       return state;
   }

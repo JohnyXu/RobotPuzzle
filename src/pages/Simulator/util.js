@@ -1,4 +1,3 @@
-import {DIRECTION} from '../../config/constant';
 import {
   isEastDirection,
   isNorthDirection,
@@ -8,9 +7,6 @@ import {
 import {DIMENSION_GRID} from './config';
 
 export const isNextPositionValid = (position, direction) => {
-  if (Object.keys(DIRECTION).indexOf(direction) < 0) {
-    return false;
-  }
   if (isEastDirection(direction)) {
     return position.x + 1 < DIMENSION_GRID.X;
   }
@@ -33,4 +29,14 @@ export const getWellBelowStatus = position => {
     return 'FULL';
   }
   return 'EMPTY';
+};
+
+export const convertGridIndex = (rowIndex, colIndex) => {
+  const index = DIMENSION_GRID.X * rowIndex + colIndex;
+  return index;
+};
+
+export const hasWaterInPosition = (rowIndex, colIndex, water) => {
+  const index = convertGridIndex(rowIndex, colIndex);
+  return water[index];
 };

@@ -17,13 +17,13 @@ import {
   placeRobotAct,
   resetRobotAct,
 } from '../../store/reducers/robotReducer';
-import {COMMAND} from '../../config/constant';
+import {COMMAND, DIRECTION} from '../../config/constant';
 import {getWellBelowStatus, isNextPositionValid} from './util';
 import {errorSettingAct} from '../../store/reducers/settingReducer';
 import ERROR_MSG from '../../config/error-msg';
 import Overlay from '../../components/Overlay';
 import {DIMENSION_GRID} from './config';
-import {isInRange} from './components/Grid/util';
+import {isInRange} from './../../utils';
 
 export default function Simulator() {
   const dispatch = useDispatch();
@@ -53,11 +53,11 @@ export default function Simulator() {
         return;
       }
       if (cmd === COMMAND.MOVE) {
-        const isValid = isNextPositionValid(
-          robotState.position,
-          commandOptions[1],
-        );
-        console.log('cmd:', isValid, robotState.position.y);
+        const direction = commandOptions[1];
+        if (Object.keys(DIRECTION).indexOf(direction) < 0) {
+          return dispatch(errorSettingAct(ERROR_MSG.MOVE_FORMAT));
+        }
+        const isValid = isNextPositionValid(robotState.position, direction);
         if (isValid) {
           updateCommands([...commands, markCommand]);
           dispatch(moveRobotAct(commandOptions[1]));
@@ -90,11 +90,11 @@ export default function Simulator() {
       return dispatch(errorSettingAct(ERROR_MSG.PLACE_FORMAT));
     }
     const [x, y] = commandOptions[1].split(',');
-    if (!y) {
+    if (!(x && y)) {
       return dispatch(errorSettingAct(ERROR_MSG.PLACE_FORMAT));
     }
-    const rowIndex = parseInt(y);
-    const colIndex = parseInt(x);
+    const rowIndex = parseInt(y, 10);
+    const colIndex = parseInt(x, 10);
     const isValidPosition =
       isInRange(rowIndex, 0, DIMENSION_GRID.Y) &&
       isInRange(colIndex, 0, DIMENSION_GRID.X);

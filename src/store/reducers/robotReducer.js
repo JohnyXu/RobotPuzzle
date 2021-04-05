@@ -1,5 +1,5 @@
 import {DIRECTION} from '../../config/constant';
-import {convertGridIndex} from '../../pages/Simulator/components/Grid/util';
+import {convertGridIndex} from '../../pages/Simulator/util';
 import {DIMENSION_GRID} from '../../pages/Simulator/config';
 import {arrayFromInterger} from '../../utils';
 
@@ -96,7 +96,6 @@ const dropRobotReducer = (water, position) => {
 };
 
 export default function reducer(state = initState, action) {
-  console.log('action:', action, state);
   switch (action.type) {
     case TYPES.PLACE:
       return {
@@ -118,7 +117,11 @@ export default function reducer(state = initState, action) {
       return {
         hasPlaced: false,
         position: null,
-        water: initWater,
+        water: arrayFromInterger(DIMENSION_GRID.X * DIMENSION_GRID.Y).map(
+          () => {
+            return false;
+          },
+        ),
       };
     default:
       return state;
